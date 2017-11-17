@@ -9,24 +9,25 @@ object Maze {
   /**
     * Creates a maze with all doors closed
     *
-    * @param nrX
-    * @param nrY
+    * @param sizeX
+    * @param sizeY
     * @param cellRect
     * @return
     */
-  def apply(nrX: Int, nrY: Int, cellRect: Rect): Maze = {
+  def apply(sizeX: Int, sizeY: Int, cellRect: Rect): Maze = {
     val arrays: Array[Cell] =
-      Array.tabulate(nrX, nrY)((y, x) => {
+      Array.tabulate(sizeX, sizeY)((y, x) => {
         val pos = Pos(x, y)
         val coord = Coord(x * cellRect.width, y * cellRect.height)
         Cell(pos, coord, cellRect)
-      }).flatten
-    Maze(nrX, nrY, Pos(0, 0), Pos(nrX, nrY), arrays, cellRect)
+      }).flatten //
+    Maze(sizeX, sizeY, Pos(0, 0), Pos(sizeX, sizeY), arrays, cellRect)
   }
 
 }
 
-
+//Definiert den klassichen Default-Konstruktor aus Java
+//case class => immutable datenstructur - nicht veränderbar
 case class Maze(nrX: Int
                 , nrY: Int
                 , start: Pos
@@ -44,6 +45,8 @@ case class Maze(nrX: Int
 
   val topBoundary: Set[Cell] = grid.slice(0, nrX).toSet
 
+  //es gibt bei for auch stepsizes for(i <- 100 to 5 by 10) yield ...
+  // von 1-100 rückwersts(bis 5) jedoch in 10er schritten
   val rightBoundary: Set[Cell] = (for (i <- (nrX - 1) until nrX * nrY by nrX) yield {
     grid(i)
   }).toSet
@@ -53,8 +56,6 @@ case class Maze(nrX: Int
   val leftBoundary: Set[Cell] = (for (i <- 0 until nrX * nrY by nrX) yield grid(i)).toSet
 
   val boundaryCells: Set[Cell] = topBoundary ++ rightBoundary ++ downBoundary ++ leftBoundary
-
-
 }
 
 

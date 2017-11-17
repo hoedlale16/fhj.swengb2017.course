@@ -21,7 +21,7 @@ object Cell {
 case class Cell(pos: Pos
                 , topLeft: Coord
                 , region: Rect
-                , up: Option[Pos]
+                , up: Option[Pos] //Option [NONE, SOME]= Haskell "Maybe"
                 , right: Option[Pos]
                 , down: Option[Pos]
                 , left: Option[Pos]) {

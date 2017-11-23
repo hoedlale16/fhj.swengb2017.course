@@ -1,5 +1,8 @@
 package at.fhj.swengb.apps.maze
 
+/**
+  * Companion object for case class Maze
+  */
 object Maze {
 
   val SmallMaze = Maze(10, 10, Rect(10, 10))
@@ -15,21 +18,21 @@ object Maze {
     * @return
     */
   def apply(sizeX: Int, sizeY: Int, cellRect: Rect): Maze = {
-    val arrays: Array[Cell] =
+    val grid: Array[Cell] =
       Array.tabulate(sizeX, sizeY)((y, x) => {
         val pos = Pos(x, y)
         val coord = Coord(x * cellRect.width, y * cellRect.height)
         Cell(pos, coord, cellRect)
-      }).flatten //
-    Maze(sizeX, sizeY, Pos(0, 0), Pos(sizeX, sizeY), arrays, cellRect)
+      }).flatten
+    Maze(sizeX, sizeY, Pos(0, 0), Pos(sizeX, sizeY), grid, cellRect)
   }
 
 }
 
 //Definiert den klassichen Default-Konstruktor aus Java
 //case class => immutable datenstructur - nicht veränderbar
-case class Maze(nrX: Int
-                , nrY: Int
+case class Maze(sizeX: Int
+                , sizeY: Int
                 , start: Pos
                 , end: Pos
                 , grid: Array[Cell]
@@ -39,23 +42,21 @@ case class Maze(nrX: Int
 
   val cellWidth: Double = cellRect.width
   val cellHeight: Double = cellRect.height
-  val boundingBox: Rect = Rect(nrX * cellWidth, nrY * cellHeight)
+  val boundingBox: Rect = Rect(sizeX * cellWidth, sizeY * cellHeight)
 
-  def getCell(pos: Pos): Cell = grid(pos.x + pos.y * nrX)
-
-  val topBoundary: Set[Cell] = grid.slice(0, nrX).toSet
+  val topBoundary: Set[Cell] = grid.slice(0, sizeX).toSet
+  val downBoundary: Set[Cell] = grid.slice(grid.length - sizeX, grid.length).toSet
 
   //es gibt bei for auch stepsizes for(i <- 100 to 5 by 10) yield ...
   // von 1-100 rückwersts(bis 5) jedoch in 10er schritten
-  val rightBoundary: Set[Cell] = (for (i <- (nrX - 1) until nrX * nrY by nrX) yield {
+  val rightBoundary: Set[Cell] = (for (i <- (sizeX - 1) until sizeX * sizeY by sizeX) yield {
     grid(i)
   }).toSet
-
-  val downBoundary: Set[Cell] = grid.slice(grid.length - nrX, grid.length).toSet
-
-  val leftBoundary: Set[Cell] = (for (i <- 0 until nrX * nrY by nrX) yield grid(i)).toSet
+  val leftBoundary: Set[Cell] = (for (i <- 0 until sizeX * sizeY by sizeX) yield grid(i)).toSet
 
   val boundaryCells: Set[Cell] = topBoundary ++ rightBoundary ++ downBoundary ++ leftBoundary
+
+  def getCell(pos: Pos): Cell = grid(pos.gridIndex(sizeX))
 }
 
 

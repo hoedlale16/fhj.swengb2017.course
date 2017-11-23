@@ -4,6 +4,9 @@ import at.fhj.swengb.apps.maze.jfx.{Door, Wall}
 
 import scala.util.Random
 
+case class PositiveInt(value: Int) {
+  require(value > 0)
+}
 
 /**
   * A Mazegenerator creates a datastructure representing a random maze.
@@ -29,23 +32,26 @@ object MazeGenerator {
     *
     * The idea is to start at the entry cell, walk in any direction
     *
-    * @param sizeX      number of cells in x direction
-    * @param sizeY      number of cells in y direction
+    * @param sizeX    number of cells in x direction
+    * @param sizeY    number of cells in y direction
     * @param start    start / entry cell of the maze
     * @param exit     exit cell of the maze
     * @param cellRect size / region of a cell
     * @return a random maze
     */
+  @deprecated("use gen with typesafe signature", "20171117")
   def gen(sizeX: Int, sizeY: Int, start: Pos, exit: Pos, cellRect: Rect): Maze = {
-    require(sizeX > 0)
-    require(sizeY > 0)
-    require(0 <= start.x && start.x <= sizeX)
-    require(0 <= start.y && start.y <= sizeY)
-    require(0 <= exit.x && exit.x < sizeX)
-    require(0 <= exit.y && exit.y < sizeY)
+    gen(PositiveInt(sizeX), PositiveInt(sizeY), start, exit, cellRect)
+  }
+
+  def gen(sizeX: PositiveInt, sizeY: PositiveInt, start: Pos, exit: Pos, cellRect: Rect): Maze = {
+    require(0 <= start.x && start.x <= sizeX.value)
+    require(0 <= start.y && start.y <= sizeY.value)
+    require(0 <= exit.x && exit.x < sizeX.value)
+    require(0 <= exit.y && exit.y < sizeY.value)
     require(start != exit)
 
-    val m = Maze(sizeX, sizeY, cellRect)
+    val m = Maze(sizeX.value, sizeY.value, cellRect)
     val startCell = m.getCell(start)
     val exitCell = m.getCell(exit)
 
@@ -57,7 +63,8 @@ object MazeGenerator {
   }
 
   //.copy ersetzt einen gewissen wert(angegeben, in dem call grid)
-  private def closeOuterDoors(m: Maze): Maze = m.copy(grid = for (c <- m.grid) yield clip(m, c))
+  private def closeOuterDoors(m: Maze): Maze =
+    m.copy(grid = for (c <- m.grid) yield clip(m, c))
 
   private def clip(m: Maze, c: Cell): Cell = {
     val up: Option[Pos] = if (m.topBoundary.contains(c)) None else c.up

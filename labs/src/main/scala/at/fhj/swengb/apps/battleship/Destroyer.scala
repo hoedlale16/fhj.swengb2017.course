@@ -13,9 +13,9 @@ object Destroyer {
   def apply(name: String, p: BattlePos, d: Direction): Destroyer = {
     d match {
       case Horizontal =>
-        Destroyer(name, (p.x until (p.x + 4)).map(x => BattlePos(x, p.y)).toSet)
+        Destroyer(name, (p.x until (p.x + 3)).map(x => BattlePos(x, p.y)).toSet)
       case Vertical =>
-        Destroyer(name, (p.y until (p.y + 4)).map(y => BattlePos(p.x, y)).toSet)
+        Destroyer(name, (p.y until (p.y + 3)).map(y => BattlePos(p.x, y)).toSet)
     }
   }
 }

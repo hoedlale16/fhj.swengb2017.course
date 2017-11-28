@@ -69,13 +69,14 @@ object Fleet {
   // TODO what is the smallest battlefield all vessels could be placed on?
   def apply(battleField: BattleField): Fleet = {
 
-    var myFleet: Set[Vessel] = Set[Vessel](BattleShip("Archduke John", BattlePos(0, 0), Vertical);
 
-    //TODO hier gets weiter, Flotte bauen
+    //Add Vessesls to fleet
+    var myFleet: Set[Vessel] = Set[Vessel](BattleShip("Archduke John", BattlePos(0, 0), Vertical));
+    myFleet += (Destroyer("My Destroyer", BattlePos(3, 0), Horizontal));
+    myFleet += (Cruiser("My Cruiser", BattlePos(2, 5), Horizontal));
+    myFleet += (Submarine("My Submarine", BattlePos(8,8),Vertical));
 
-    myFleet +=
-
-    Fleet(Set[Vessel](BattleShip("Archduke John", BattlePos(0, 0), Vertical)))
+    Fleet(myFleet);
   }
 
 }

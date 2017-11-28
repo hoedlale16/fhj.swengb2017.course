@@ -13,9 +13,9 @@ object Submarine {
   def apply(name: String, p: BattlePos, d: Direction): Submarine = {
     d match {
       case Horizontal =>
-        Submarine(name, (p.x until (p.x + 4)).map(x => BattlePos(x, p.y)).toSet)
+        Submarine(name, (p.x until (p.x + 2)).map(x => BattlePos(x, p.y)).toSet)
       case Vertical =>
-        Submarine(name, (p.y until (p.y + 4)).map(y => BattlePos(p.x, y)).toSet)
+        Submarine(name, (p.y until (p.y + 2)).map(y => BattlePos(p.x, y)).toSet)
     }
   }
 }

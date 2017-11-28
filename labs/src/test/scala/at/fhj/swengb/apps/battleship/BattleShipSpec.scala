@@ -81,14 +81,23 @@ class BattleShipSpec extends WordSpecLike {
         ))
       }
     }
-    // illegalPos defines a ship which is not possible
-    "pos is connected" in {
+    "if positions are not connected in x direction throw exception" in {
       intercept[IllegalArgumentException] {
-        val b = BattleShip("a b c", Set(BattlePos(0, 0),
+       BattleShip("a b c", Set(BattlePos(0, 0),
           BattlePos(1, 0),
           BattlePos(2, 0),
           BattlePos(3, 0),
           BattlePos(5, 0),
+        ))
+      }
+    }
+    "if positions are not connected in y direction throw exception" in {
+      intercept[IllegalArgumentException] {
+        BattleShip("a b c", Set(BattlePos(0, 0),
+          BattlePos(0, 1),
+          BattlePos(0, 2),
+          BattlePos(0, 3),
+          BattlePos(0, 5),
         ))
       }
     }

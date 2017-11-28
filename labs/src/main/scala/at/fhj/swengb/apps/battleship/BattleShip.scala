@@ -1,5 +1,8 @@
 package at.fhj.swengb.apps.battleship
 
+import at.fhj.swengb.MathUtil
+
+
 object BattleShip {
 
   /**
@@ -41,13 +44,15 @@ case class BattleShip(name: String, positions: Set[BattlePos]) extends Vessel {
   require(name.nonEmpty, "Name has to be set.")
 
   // require proofs that positions is of size 5
-  require(
-    positions.size == 5,
-    s"For mighty battleship '$name' required 5 positions, but got ${positions.size}.")
+  require(positions.size == 5, s"For mighty battleship '$name' required 5 positions, but got ${positions.size}.")
 
   // mission: we have to proof that all x positions or all y positions are the same and that all cells are connected.
-  private val allXCoordinatesAreTheSame = positions.map(_.x).size == 1
-  private val allYCoordinatesAreTheSame = positions.map(_.y).size == 1
+
+  private val xPositions: Set[Int] = positions.map(_.x)
+  private val yPositions: Set[Int] = positions.map(_.y)
+
+  private val allXCoordinatesAreTheSame = xPositions.size == 1
+  private val allYCoordinatesAreTheSame = yPositions.size == 1
 
   val allCoordinatesAreTheSameForXOrY
     : Boolean = allXCoordinatesAreTheSame || allYCoordinatesAreTheSame
@@ -56,6 +61,9 @@ case class BattleShip(name: String, positions: Set[BattlePos]) extends Vessel {
   require(allCoordinatesAreTheSameForXOrY)
 
   // additional requirement is needed to check for connectedness
+
+  // =======
+  // Soluation by Hoedl
   def isChained(list: Seq[Int], current: Int): Boolean = {
     if (current >= list.length - 1)
       /*Looped over all items found nothing weired -> all elements sorted we're done*/
@@ -73,7 +81,22 @@ case class BattleShip(name: String, positions: Set[BattlePos]) extends Vessel {
   val sortedYList = positions.map(_.y).toSeq.sorted;
 
   require(isChained(sortedXList, 0),
-          "Battleship positions required to be chained")
+        "Battleship positions required to be chained")
   require(isChained(sortedYList, 0),
-          "Battleship positions required to be chained")
+        "Battleship positions required to be chained")
+
+  /* =======
+  // Soluation by Ladtstaetter
+  private val isConnectedInXDirection = MathUtil.isConnected(positions.toSeq.map(_.x))
+  private val isConnectedInYDirection = MathUtil.isConnected(positions.toSeq.map(_.y))
+  // has to be true for all Battleships
+  if (allYCoordinatesAreTheSame) {
+    require(isConnectedInXDirection)
+  }
+
+  if (allXCoordinatesAreTheSame) {
+    require(isConnectedInYDirection)
+  }
+  */
+
 }

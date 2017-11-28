@@ -1,49 +1,34 @@
 package at.fhj.swengb.apps.battleship
 
-object BattleShip {
-
+object Cruiser {
   /**
-    * This is a convenience constructor for a Battleship. You can define a starting position and
+    * This is a convenience constructor for a Cruiser. You can define a starting position and
     * a direction and don't need to define all positions explicitly.
     *
-    * @param name the name of the battleship
+    * @param name the name of the cruiser
     * @param p    starting position
     * @param d    direction
     * @return
     */
-  def apply(name: String, p: BattlePos, d: Direction): BattleShip = {
+  def apply(name: String, p: BattlePos, d: Direction): Cruiser = {
     d match {
       case Horizontal =>
-        BattleShip(name,
-                   (p.x until (p.x + 5)).map(x => BattlePos(x, p.y)).toSet)
+        Cruiser(name, (p.x until (p.x + 4)).map(x => BattlePos(x, p.y)).toSet)
       case Vertical =>
-        BattleShip(name,
-                   (p.y until (p.y + 5)).map(y => BattlePos(p.x, y)).toSet)
+        Cruiser(name, (p.y until (p.y + 4)).map(y => BattlePos(p.x, y)).toSet)
     }
   }
 }
 
-/**
-  * A battleship has a name and a set of positions.
-  *
-  * Those positions have to be connected. Also they have to be in a straight line, that means
-  * that either all x coordinates are equal or all y coordinates are equal.
-  *
-  * Often it is far easier to use the convenience constructor defined in the companion object to construct
-  * a battleship.
-  *
-  * @param name      the name of the ship (must be set and not empty)
-  * @param positions the positions
-  */
-case class BattleShip(name: String, positions: Set[BattlePos]) extends Vessel {
+case class Cruiser(name: String, positions: Set[BattlePos]) extends Vessel {
 
-  // every battleship has to have a name
+  // every cruiser has to have a name
   require(name.nonEmpty, "Name has to be set.")
 
   // require proofs that positions is of size 5
   require(
-    positions.size == 5,
-    s"For mighty battleship '$name' required 5 positions, but got ${positions.size}.")
+    positions.size == 4,
+    s"For mighty cruiser '$name' required 4 positions, but got ${positions.size}.")
 
   // mission: we have to proof that all x positions or all y positions are the same and that all cells are connected.
   private val allXCoordinatesAreTheSame = positions.map(_.x).size == 1
@@ -72,8 +57,6 @@ case class BattleShip(name: String, positions: Set[BattlePos]) extends Vessel {
   val sortedXList = positions.map(_.x).toSeq.sorted;
   val sortedYList = positions.map(_.y).toSeq.sorted;
 
-  require(isChained(sortedXList, 0),
-          "Battleship positions required to be chained")
-  require(isChained(sortedYList, 0),
-          "Battleship positions required to be chained")
+  require(isChained(sortedXList, 0), "Cruiser positions required to be chained")
+  require(isChained(sortedYList, 0), "Cruiser positions required to be chained")
 }

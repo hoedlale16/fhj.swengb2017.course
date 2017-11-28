@@ -68,6 +68,13 @@ object Fleet {
   // TODO maybe a battlefield is too small for a Battleship?
   // TODO what is the smallest battlefield all vessels could be placed on?
   def apply(battleField: BattleField): Fleet = {
+
+    var myFleet: Set[Vessel] = Set[Vessel](BattleShip("Archduke John", BattlePos(0, 0), Vertical);
+
+    //TODO hier gets weiter, Flotte bauen
+
+    myFleet +=
+
     Fleet(Set[Vessel](BattleShip("Archduke John", BattlePos(0, 0), Vertical)))
   }
 

@@ -41,7 +41,6 @@ class BattleShipFxController extends Initializable {
   private def createGame(): BattleShipGame = {
     val battleField = BattleField.placeRandomly(BattleField(10, 10, Fleet(FleetConfig.Standard)))
     val game = BattleShipGame(battleField, getCellWidth, getCellHeight, appendLog)
-    game
   }
 
 }

@@ -4,14 +4,29 @@ import javafx.scene.layout.GridPane
 
 import at.fhj.swengb.apps.battleship.{BattleField, BattlePos, Vessel}
 
-
+/**
+  * Contains all information about a battleship game.
+  *
+  * @param battleField
+  * @param getCellWidth
+  * @param getCellHeight
+  * @param log
+  */
 case class BattleShipGame(battleField: BattleField,
                           getCellWidth: Int => Double,
                           getCellHeight: Int => Double,
                           log: String => Unit) {
 
+  /**
+    * remembers which vessel was hit at which position
+    * starts with the empty map, meaning that no vessel was hit yet.
+    *
+    **/
   var hits: Map[Vessel, Set[BattlePos]] = Map()
 
+  /**
+    * contains all vessels which are destroyed
+    */
   var sunkShips: Set[Vessel] = Set()
 
   /**

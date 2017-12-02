@@ -10,13 +10,13 @@ case class BattleCell(pos: BattlePos
                       , height: Double
                       , log: String => Unit
                       , someVessel: Option[Vessel] = None
-                      , updateGameState: (Vessel, BattlePos) => Unit
+                      , fn: (Vessel, BattlePos) => Unit
                      ) extends Rectangle(width, height) {
 
 
   def init(): Unit = {
     if (someVessel.isDefined) {
-      setFill(Color.DARKGREEN)
+      setFill(Color.YELLOWGREEN)
     } else {
       setFill(Color.BLUE)
     }
@@ -25,10 +25,11 @@ case class BattleCell(pos: BattlePos
   setOnMouseClicked(e => {
     someVessel match {
       case None =>
-        log(s"Missed. Just hit water.")
+       // log(s"Missed. Just hit water.")
         setFill(Color.YELLOW)
       case Some(v) =>
-        updateGameState(v, pos)
+        //log(s"Hit an enemy vessel!")
+        fn(v, pos)
         setFill(Color.RED)
     }
   })

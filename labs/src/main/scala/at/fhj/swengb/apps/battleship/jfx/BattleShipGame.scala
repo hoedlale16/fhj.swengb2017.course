@@ -4,6 +4,8 @@ import javafx.scene.layout.GridPane
 
 import at.fhj.swengb.apps.battleship.{BattleField, BattlePos, Vessel}
 
+import scala.collection.immutable
+
 /**
   * Contains all information about a battleship game.
   *
@@ -35,57 +37,62 @@ case class BattleShipGame(battleField: BattleField,
   private val cells: Seq[BattleCell] = for {x <- 0 until battleField.width
                                             y <- 0 until battleField.height
                                             pos = BattlePos(x, y)} yield {
-    BattleCell(BattlePos(x, y), getCellWidth(x), getCellHeight(y), log, battleField.fleet.findByPos(pos), updateGameState)
+    BattleCell(BattlePos(x, y),
+      getCellWidth(x),
+      getCellHeight(y),
+      log,
+      battleField.fleet.findByPos(pos),
+      updateGameState)
   }
 
+  // TODO implement a message which complains about the user if he hits a vessel more than one time on a specific position
+  // TODO if all parts of a vessel are hit, a log message should indicate that the vessel has sunk. The name should be displayed.
+  // TODO make sure that when a vessel was destroyed, it is sunk and cannot be destroyed again. it is destroyed already.
+  // TODO if all vessels are destroyed, display this to the user
+  // TODO reset game state when a new game is started
   def updateGameState(vessel: Vessel, pos: BattlePos): Unit = {
+    log("Vessel " + vessel.name.value + " was hit at position " + pos)
 
-    if ( ! sunkShips.contains(vessel)) {
-      log(s"Hit an enemy vessel!")
+    if (hits.contains(vessel)) {
+      // this code is executed if vessel was already hit at least once
 
-      //It is the first hit of the vessel
-      if (hits.contains(vessel)) {
+      // pos
+      // vessel
+      // map (hits)
 
-        //Vessel already hit at least once
-        val currentHits: Set[BattlePos] = hits(vessel)
-        val updatedHits: Set[BattlePos] = currentHits + pos
+      // we want to update the hits map
+      // the map should be updated if
+      // we hit a vessel which is already contained
+      // in the 'hits' map, and it's values (
+      // the set of BattlePos) should be added
+      // the current pos
+      val oldPos: Set[BattlePos] = hits(vessel)
 
-        if (currentHits.contains(pos)) {
-          log(s"Vessel already hit and destroyed at position <" + pos + ">!")
-        } else {
-          //Not hit yet, add position to list and update hit map
-          hits = hits.updated(vessel, updatedHits)
+      hits = hits.updated(vessel, oldPos + pos)
 
-          //WP2 => Check if ship is totatlly destroyed
-          if (updatedHits.equals(vessel.occupiedPos)) {
-            log("Vessel" + vessel.name + "was totally destroyed and sunk!")
+      hits(vessel).foreach(p => log(p.toString))
 
-            //Add ship to sunk sihps
-            sunkShips = sunkShips + vessel
+      if (oldPos.contains(pos)) {
+        log("Position was triggered two times.")
+      }
 
-            //Recolor sunk ship
-            for {x <- vessel.startPos.x until vessel.startPos.x + vessel.size
-                 y <- vessel.startPos.y until vessel.startPos.y + vessel.size} yield {
+      if (vessel.occupiedPos == hits(vessel)) {
+        log(s"Ship ${vessel.name.value} was destroyed.")
+        sunkShips = sunkShips + vessel
 
-              //if ( cells.find(p => p.pos.x == x && p.pos.y == y) )
-
-            }
-
-          }
+        if (battleField.fleet.vessels == sunkShips) {
+          log("G A M E   totally  O V E R")
         }
-      } else {
-        hits = hits.updated(vessel, Set(pos))
       }
 
-      //WP3 => Check if all vessels are destroyed now
-      if (sunkShips.equals(battleField.fleet.vessels)) {
-        log("Game over - All Ships destroyed!")
-      }
 
+
+    } else {
+      // vessel is not part of the map
+      // but vessel was hit!
+      // it was hit the first time ever!
+      hits = hits.updated(vessel, Set(pos))
     }
-    else {
-        log("Hit Water - Ship already on the ground!");
-      }
   }
 
 

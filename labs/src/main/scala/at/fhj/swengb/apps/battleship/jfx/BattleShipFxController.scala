@@ -38,7 +38,7 @@ class BattleShipFxController extends Initializable {
   }
 
   private def createGame(): BattleShipGame = {
-    val field = BattleField(10, 10, Fleet(FleetConfig.TwoShips))
+    val field = BattleField(10, 10, Fleet(FleetConfig.Standard))
 
     val battleField: BattleField = BattleField.placeRandomly(field)
 

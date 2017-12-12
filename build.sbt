@@ -3,16 +3,20 @@ import Dependencies._
 import BuildConstants._
 
 
+lazy val commonSettings: Seq[Def.SettingsDefinition] = Seq(
+  organization := org,
+  scalaVersion := scalaVer,
+  version := buildVer,
+  libraryDependencies += scalaTest,
+  fork := true
+)
+
 // ------------------------------------------------------
 // common
 lazy val common = (project in file("common/")).
+  settings(commonSettings: _*).
   settings(
-    organization := org,
-    scalaVersion := scalaVer,
-    version := buildVer,
     name := "common",
-    libraryDependencies += scalaTest,
-    fork := true
   )
 
 
@@ -20,13 +24,9 @@ lazy val common = (project in file("common/")).
 // labs
 
 lazy val labs = (project in file("labs/")).
- settings(
-    organization := org,
-    scalaVersion := scalaVer,
-    version := buildVer,
+  settings(commonSettings: _*).
+  settings(
     name := "labs",
-    libraryDependencies += scalaTest,
-    fork := true
   ).dependsOn(common)
 
 // END labs ----------------------------------------------
@@ -35,10 +35,5 @@ lazy val labs = (project in file("labs/")).
 // ------------------------------------------------------
 // main project
 lazy val course = (project in file(".")).
-  settings(
-    organization := org,
-    scalaVersion := scalaVer,
-    version := buildVer,
-    name := "course",
-    libraryDependencies += scalaTest
-  ).aggregate(common,labs)
+  settings(commonSettings: _*).
+  settings(name := "course").aggregate(common,labs)

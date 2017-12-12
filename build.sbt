@@ -24,9 +24,11 @@ lazy val common = (project in file("common/")).
 // labs
 
 lazy val labs = (project in file("labs/")).
+  enablePlugins(ProtobufPlugin).
   settings(commonSettings: _*).
   settings(
     name := "labs",
+    javaSource in ProtobufConfig := ((sourceDirectory in Compile).value / "generated"),
   ).dependsOn(common)
 
 // END labs ----------------------------------------------

@@ -11,7 +11,7 @@ object MazeProtocol {
 
   def convert(pos: MazeProtobuf.Pos): Pos = ???
 
-  def convert(end: Pos): MazeProtobuf.Pos = MazeProtobuf.Pos.newBuilder().build()
+  def convert(end: Pos): MazeProtobuf.Pos = MazeProtobuf.Pos.newBuilder().setX(end.x).setY(end.y).build()
 
   def convert(cellRect: Rect): MazeProtobuf.Rect = MazeProtobuf.Rect.newBuilder().build()
 

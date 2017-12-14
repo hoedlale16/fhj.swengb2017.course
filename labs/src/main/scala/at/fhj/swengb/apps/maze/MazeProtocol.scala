@@ -11,12 +11,20 @@ object MazeProtocol {
 
   def convert(pos: MazeProtobuf.Pos): Pos = ???
 
-  def convert(end: Pos): MazeProtobuf.Pos = MazeProtobuf.Pos.newBuilder().setX(end.x).setY(end.y).build()
+  def convert(end: Pos): MazeProtobuf.Pos =
+    MazeProtobuf.Pos.newBuilder().setX(end.x).setY(end.y).build()
 
-  def convert(cellRect: Rect): MazeProtobuf.Rect = MazeProtobuf.Rect.newBuilder().build()
+  def convert(cellRect: Rect): MazeProtobuf.Rect =
+    MazeProtobuf.Rect
+      .newBuilder()
+      .setHeight(cellRect.height)
+      .setWidth(cellRect.width)
+      .build()
 
-  def convert(cell: Cell): MazeProtobuf.Cell = MazeProtobuf.Cell
-    .newBuilder().build
+  def convert(cell: Cell): MazeProtobuf.Cell =
+    MazeProtobuf.Cell
+      .newBuilder()
+      .build
 
   /**
     * Provided a protobuf encoded maze, create a business model class 'maze' again
@@ -30,7 +38,8 @@ object MazeProtocol {
       protoMaze.getSizeY,
       Pos(0, 0), // TODO read from proto
       Pos(1, 0), // TODO read from proto
-      Array.fill(protoMaze.getSizeX * protoMaze.getSizeY)(Cell(Pos(0, 0), Coord(0, 0), Rect(0, 0))), // TODO read from proto
+      Array.fill(protoMaze.getSizeX * protoMaze.getSizeY)(
+        Cell(Pos(0, 0), Coord(0, 0), Rect(0, 0))), // TODO read from proto
       Rect(100, 100) // TODO read from proto
     )
   }
@@ -41,9 +50,11 @@ object MazeProtocol {
   def convert(maze: Maze): MazeProtobuf.Maze = {
     val pCoord = MazeProtobuf.Coord.newBuilder().build
 
-    val cells: lang.Iterable[MazeProtobuf.Cell] = maze.grid.map(convert).toIterable.asJava
+    val cells: lang.Iterable[MazeProtobuf.Cell] =
+      maze.grid.map(convert).toIterable.asJava
 
-    val pMaze = MazeProtobuf.Maze.newBuilder()
+    val pMaze = MazeProtobuf.Maze
+      .newBuilder()
       .setSizeX(maze.sizeX)
       .setSizeY(maze.sizeY)
       .setStart(convert(maze.start))
@@ -53,6 +64,5 @@ object MazeProtocol {
       .build()
     pMaze
   }
-
 
 }

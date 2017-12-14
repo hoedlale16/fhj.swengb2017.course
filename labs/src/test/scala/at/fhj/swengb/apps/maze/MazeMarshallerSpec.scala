@@ -21,8 +21,8 @@ class MazeMarshallerSpec extends WordSpecLike {
       val pos = Rect(4711.0, 815.0)
       val actual: MazeProtobuf.Rect = MazeProtocol.convert(pos)
 
-      assert(pos.width == actual.getHeight)
-      assert(pos.height == actual.getWidth)
+      assert(pos.width == actual.getWidth)
+      assert(pos.height == actual.getHeight)
     }
   }
 }

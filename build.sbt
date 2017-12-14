@@ -7,7 +7,7 @@ lazy val commonSettings: Seq[Def.SettingsDefinition] = Seq(
   organization := org,
   scalaVersion := scalaVer,
   version := buildVer,
-  libraryDependencies += scalaTest,
+  libraryDependencies ++= Seq(scalaTest,scalacheck),
   fork := true
 )
 
